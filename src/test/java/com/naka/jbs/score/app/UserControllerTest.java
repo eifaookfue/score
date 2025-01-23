@@ -45,7 +45,10 @@ class UserControllerTest {
     @BeforeEach
     public void setup() throws IOException {
         if (Objects.isNull(redisServer)) {
-            redisServer = new RedisServer(redisProperties.getRedisPort());
+            String[] firstNode = redisProperties.getNodes().get(0).split(":");
+            String p = firstNode[1];
+            Integer port = Integer.parseInt(p);
+            redisServer = new RedisServer(port);
             redisServer.start();
         }
     }
