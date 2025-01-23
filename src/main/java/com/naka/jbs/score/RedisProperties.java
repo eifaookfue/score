@@ -1,19 +1,16 @@
 package com.naka.jbs.score;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import java.util.List;
 
-import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@Getter
+import lombok.Data;
+
+@Component
+@ConfigurationProperties(prefix = "spring.data.redis.cluster")
+@Data
 public class RedisProperties {
-    private int redisPort;
-    private String redisHost;
-
-    public RedisProperties(@Value("${spring.data.redis.port}") int redisPort, @Value("${spring.data.redis.host}") String redisHost) {
-        this.redisPort = redisPort;
-        this.redisHost = redisHost;
-    }
-
+    private List<String> nodes;
+    private int maxRedirects;
 }
