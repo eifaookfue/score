@@ -1,0 +1,7 @@
+spring:
+  data:
+    redis:
+      cluster:
+        nodes:
+          - localhost:6379
+        max-redirects: 1
