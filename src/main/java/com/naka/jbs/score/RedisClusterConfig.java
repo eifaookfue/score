@@ -10,9 +10,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class RedisClusterConfig {
     @Bean
     LettuceConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {
-        RedisClusterConfiguration clusterConfig = new RedisClusterConfiguration(redisProperties.getNodes());
-        clusterConfig.setMaxRedirects(redisProperties.getMaxRedirects());
-        return new LettuceConnectionFactory(clusterConfig);
+        if (redisProperties.getNodes().size() > 1) {
+            RedisClusterConfiguration clusterConfig = new RedisClusterConfiguration(redisProperties.getNodes());
+            clusterConfig.setMaxRedirects(redisProperties.getMaxRedirects());
+            return new LettuceConnectionFactory(clusterConfig);
+        }
+        String[] firstNode = redisProperties.getNodes().get(0).split(":");
+        String host = firstNode[0];
+        String p = firstNode[1];
+        Integer port = Integer.parseInt(p);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean
