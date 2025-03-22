@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naka.jbs.score.domain.model.entity.score.KwEmployee;
@@ -21,6 +22,11 @@ public class KwEmployeeController {
     public ResponseEntity<List<KwEmployee>> getKwEmployee() {
         List<KwEmployee> kwEmployees = kwEmployeeService.getAll();
         return ResponseEntity.ok(kwEmployees);
+    }
+
+    @PostMapping("/kwEmployee")
+    public void postKwEmployee() {
+        kwEmployeeService.postKwEmployee();
     }
 
 }
