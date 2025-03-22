@@ -7,4 +7,6 @@ import com.naka.jbs.score.domain.model.entity.score.KwEmployee;
 public interface KwEmployeeService {
 
     List<KwEmployee> getAll();
+
+    void postKwEmployee();
 }
