@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="PATTERN"
+		value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%L - %msg%n" />
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<property name="LOG" value="${java.io.tmpdir}" />
+	<appender name="File" class="ch.qos.logback.core.FileAppender">
+		<file>${LOG}/score.log</file>
+		<append>false</append>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="Console" />
+		<appender-ref ref="File" />
+	</root>
+</configuration>
