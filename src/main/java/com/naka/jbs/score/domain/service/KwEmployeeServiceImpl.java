@@ -2,6 +2,8 @@ package com.naka.jbs.score.domain.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,19 @@ public class KwEmployeeServiceImpl implements KwEmployeeService {
             Map<String, Object> map = objectMapper.convertValue(kwEmployee, new TypeReference<Map<String, Object>>() {});
             String key = "kwEmployee" + ":" + kwEmployee.getUid();
             redisTemplate.opsForHash().putAll(key, map);
+            redisTemplate.opsForSet().add("__kwEmployee", kwEmployee.getUid());
         });
 
+    }
+
+    @Override
+    public List<KwEmployee> getAllFromRedis() {
+        Set<Object> keys = redisTemplate.opsForSet().members("__kwEmployee");
+        return keys.stream().map(String.class::cast).map(k -> {
+            String key = "kwEmployee" + ":" + k;
+            Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
+            return objectMapper.convertValue(map, KwEmployee.class);
+        }).collect(Collectors.toList());
     }
 
 }
