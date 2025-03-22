@@ -39,8 +39,7 @@ public class RedisClusterConfig {
                 LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL);
 
-        Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(mapper, Object.class);
-        template.setValueSerializer(valueSerializer);
+        template.setValueSerializer(new StringRedisSerializer());
         template.setHashKeySerializer(keySerializer);
         template.setHashValueSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
