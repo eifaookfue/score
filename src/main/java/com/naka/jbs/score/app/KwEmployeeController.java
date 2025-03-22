@@ -29,4 +29,10 @@ public class KwEmployeeController {
         kwEmployeeService.postKwEmployee();
     }
 
+    @GetMapping("/kwEmployeeRedis")
+    public ResponseEntity<List<KwEmployee>> getRedisKwEmployee() {
+        List<KwEmployee> kwEmployees = kwEmployeeService.getAllFromRedis();
+        return ResponseEntity.ok(kwEmployees);
+    }
+
 }
