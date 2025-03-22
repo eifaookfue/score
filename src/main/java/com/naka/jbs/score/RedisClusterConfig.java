@@ -5,6 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 
 @Configuration
 public class RedisClusterConfig {
@@ -24,8 +30,20 @@ public class RedisClusterConfig {
 
     @Bean
     RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory connectionFactory) {
-        RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
+        RedisSerializer<String> keySerializer = new StringRedisSerializer();
+        template.setKeySerializer(keySerializer);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL);
+
+        Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(mapper, Object.class);
+        template.setValueSerializer(valueSerializer);
+        template.setHashKeySerializer(keySerializer);
+        template.setHashValueSerializer(new StringRedisSerializer());
+        template.afterPropertiesSet();
         return template;
     }
 }
