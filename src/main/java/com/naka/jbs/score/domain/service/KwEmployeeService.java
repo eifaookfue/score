@@ -8,5 +8,7 @@ public interface KwEmployeeService {
 
     List<KwEmployee> getAll();
 
+    List<KwEmployee> getAllFromRedis();
+
     void postKwEmployee();
 }
